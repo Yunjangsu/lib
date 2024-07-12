@@ -1,0 +1,29 @@
+replicaCounts:
+  loginweb: 2
+  boardweb: 2
+  mainweb: 2
+  memberweb: 2
+
+images:
+  loginweb: "654654194175.dkr.ecr.ap-northeast-2.amazonaws.com/loginweb:16"
+  boardweb: "654654194175.dkr.ecr.ap-northeast-2.amazonaws.com/boardweb:7"
+  mainweb: "654654194175.dkr.ecr.ap-northeast-2.amazonaws.com/mainweb:16"
+  memberweb: "654654194175.dkr.ecr.ap-northeast-2.amazonaws.com/memberweb:2"
+
+hpa:
+  loginweb:
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 60
+  boardweb:
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 10
+  memberweb:
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 60
+  mainweb:
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 60  

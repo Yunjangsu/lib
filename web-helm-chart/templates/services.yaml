@@ -1,0 +1,23 @@
+{{- define "service.template" -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name }}-svc
+  namespace: web
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+      nodePort: {{ .nodePort }}
+  selector:
+    app: {{ .name }}
+    key: {{ .key }}
+---
+{{- end -}}
+
+{{- template "service.template" (dict "name" "loginweb" "key" "login" "nodePort" 30100) -}}
+{{- template "service.template" (dict "name" "boardweb" "key" "board" "nodePort" 30003) -}}
+{{- template "service.template" (dict "name" "mainweb" "key" "main" "nodePort" 30200) -}}
+{{- template "service.template" (dict "name" "memberweb" "key" "member" "nodePort" 30300) -}}
