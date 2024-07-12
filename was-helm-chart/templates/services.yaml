@@ -1,0 +1,24 @@
+{{- define "service.template" -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name }}-svc
+  labels:
+    app: {{ .name }}
+    key: {{ .key }}
+spec:
+  clusterIP: {{ .clusterIP }}
+  ports:
+  - port: {{ .port }}
+    protocol: TCP
+    targetPort: {{ .port }}
+  selector:
+    app: {{ .name }}
+    key: {{ .key }}
+  type: ClusterIP
+---
+{{- end -}}
+
+{{- template "service.template" (dict "name" "loginwas" "key" "login" "clusterIP" .Values.services.loginwas.clusterIP "port" .Values.services.loginwas.port) -}}
+{{- template "service.template" (dict "name" "boardwas" "key" "board" "clusterIP" .Values.services.boardwas.clusterIP "port" .Values.services.boardwas.port) -}}
+{{- template "service.template" (dict "name" "memberwas" "key" "member" "clusterIP" .Values.services.memberwas.clusterIP "port" .Values.services.memberwas.port) -}}

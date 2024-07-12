@@ -1,0 +1,36 @@
+replicaCounts:
+  loginwas: 2
+  boardwas: 2
+  memberwas: 2
+
+images:
+  loginwas: "654654194175.dkr.ecr.ap-northeast-2.amazonaws.com/loginwas:38"
+  boardwas: "654654194175.dkr.ecr.ap-northeast-2.amazonaws.com/boardwas:7"
+  memberwas: "654654194175.dkr.ecr.ap-northeast-2.amazonaws.com/memberwas:43"
+
+hpa:
+  loginwas:
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 60
+  boardwas:
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 60
+  memberwas:
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 60
+
+services:
+  loginwas:
+    clusterIP: "172.20.0.3"
+    port: 8080
+  boardwas:
+    clusterIP: "172.20.0.6"
+    port: 8080
+  memberwas:
+    clusterIP: "172.20.0.9"
+    port: 8080
+ingress:
+  enabled: false

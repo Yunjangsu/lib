@@ -1,0 +1,70 @@
+{{- define "deployment.template" -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .name }}
+  labels:
+    app: {{ .name }}
+    key: {{ .key }}
+spec:
+  replicas: {{ .replicas }}
+  selector:
+    matchLabels:
+      app: {{ .name }}
+      key: {{ .key }}
+  template:
+    metadata:
+      labels:
+        app: {{ .name }}
+        key: {{ .key }}
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: key
+                  operator: In
+                  values:
+                  - {{ .key }}
+              topologyKey: topology.kubernetes.io/zone
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              key: {{ .key }}
+      containers:
+      - name: {{ .name }}
+        image: {{ .image }}
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 30
+        readinessProbe:
+           tcpSocket:
+             port: 8080
+           initialDelaySeconds: 30
+           periodSeconds: 10
+           timeoutSeconds: 30
+        resources:
+          requests:
+            cpu: 200m
+            memory: 200Mi
+          limits:
+            cpu: 200m
+            memory: 200Mi
+---
+{{- end -}}
+
+{{- template "deployment.template" (dict "name" "loginwas" "replicas" .Values.replicaCounts.loginwas "key" "login" "image" .Values.images.loginwas) -}}
+{{- template "deployment.template" (dict "name" "boardwas" "replicas" .Values.replicaCounts.boardwas "key" "board" "image" .Values.images.boardwas) -}}
+{{- template "deployment.template" (dict "name" "memberwas" "replicas" .Values.replicaCounts.memberwas "key" "member" "image" .Values.images.memberwas) -}}

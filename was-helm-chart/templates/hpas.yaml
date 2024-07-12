@@ -1,0 +1,19 @@
+{{- define "hpa.template" -}}
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .name }}-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .name }}
+  minReplicas: {{ .hpa.minReplicas }}
+  maxReplicas: {{ .hpa.maxReplicas }}
+  targetCPUUtilizationPercentage: {{ .hpa.targetCPUUtilizationPercentage }}
+---
+{{- end -}}
+
+{{- template "hpa.template" (dict "name" "loginwas" "hpa" .Values.hpa.loginwas) -}}
+{{- template "hpa.template" (dict "name" "boardwas" "hpa" .Values.hpa.boardwas) -}}
+{{- template "hpa.template" (dict "name" "memberwas" "hpa" .Values.hpa.memberwas) -}}
